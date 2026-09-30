@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kit Segundo Cérebro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: coluna única de manual, largura de leitura; passos numerados em trilho à esquerda; comandos em blocos de tinta. */
+:root {
+  --paper: #f5f7f7;
+  --sheet: #ffffff;
+  --ink: #16282c;
+  --muted: #56696d;
+  --rule: #d5dfe0;
+  --accent: #0f6b73;
+  --accent-soft: #e1eff0;
+  --code-bg: #14262a;
+  --code-fg: #e4f1f1;
+  --warn: #8a5a00;
+  --warn-soft: #fbf0d9;
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --f-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f1a1c; --sheet: #152326; --ink: #e3eeee; --muted: #93a8ab; --rule: #27393c;
+    --accent: #5cc3c9; --accent-soft: #173336; --code-bg: #0a1416; --code-fg: #d6ecec;
+    --warn: #f0c46b; --warn-soft: #2e2512; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f1a1c; --sheet: #152326; --ink: #e3eeee; --muted: #93a8ab; --rule: #27393c;
+  --accent: #5cc3c9; --accent-soft: #173336; --code-bg: #0a1416; --code-fg: #d6ecec;
+  --warn: #f0c46b; --warn-soft: #2e2512; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.6; padding-inline: 16px; padding-block: 0 64px; }
+.wrap { max-width: 720px; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; line-height: 1.15; margin: 0; }
+h1 { font-size: clamp(2.2rem, 7vw, 3.4rem); font-weight: 700; letter-spacing: -0.02em; }
+h2 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.01em; }
+h3 { font-size: 1.12rem; font-weight: 500; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.eyebrow { font-family: var(--f-mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+header { padding-block: 56px 32px; display: grid; gap: 16px; }
+.lede { font-size: 1.2rem; color: var(--muted); max-width: 58ch; }
+section { padding-block: 40px 8px; display: grid; gap: 20px; border-top: 1px solid var(--rule); }
+.layers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.layer { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.layer code { font-family: var(--f-mono); font-size: 0.85rem; color: var(--accent); }
+.layer p { font-size: 0.95rem; color: var(--muted); }
+.layer .who { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
+.needs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 24px; padding: 0; margin: 0; list-style: none; }
+.needs li { display: flex; gap: 10px; align-items: baseline; min-width: 0; }
+.needs li::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); transform: translateY(-2px); }
+.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; display: grid; gap: 28px; }
+.steps > li { counter-increment: s; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 16px; }
+.steps > li::before { content: counter(s); font-family: var(--f-display); font-weight: 700; font-size: 1.1rem; color: var(--accent); background: var(--accent-soft); width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; }
+.step { display: grid; gap: 10px; min-width: 0; }
+.step p { color: var(--ink); }
+.step .note { color: var(--muted); font-size: 0.95rem; }
+.cmd { position: relative; background: var(--code-bg); color: var(--code-fg); border-radius: 6px; font-family: var(--f-mono); font-size: 0.88rem; line-height: 1.5; min-width: 0; }
+.cmd pre { margin: 0; padding: 14px 92px 14px 16px; overflow-x: auto; white-space: pre; }
+.cmd button { position: absolute; top: 8px; right: 8px; font-family: var(--f-mono); font-size: 0.75rem; background: transparent; color: var(--code-fg); border: 1px solid color-mix(in srgb, var(--code-fg) 35%, transparent); border-radius: 4px; padding: 4px 10px; cursor: pointer; }
+.cmd button:hover { background: color-mix(in srgb, var(--code-fg) 12%, transparent); }
+.say { font-family: var(--f-mono); font-size: 0.92rem; background: var(--accent-soft); color: var(--ink); border-radius: 4px; padding: 1px 6px; }
+.tablewrap { overflow-x: auto; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 0.97rem; }
+th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+td:first-child { white-space: nowrap; }
+.rules { display: grid; gap: 18px; }
+.rule { display: grid; gap: 4px; }
+.rule p { color: var(--muted); }
+.callout { background: var(--warn-soft); border-radius: 6px; padding: 14px 16px; display: grid; gap: 4px; }
+.callout strong { color: var(--warn); font-family: var(--f-display); font-weight: 500; }
+.faq { display: grid; gap: 8px; }
+details { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 16px; }
+summary { cursor: pointer; font-family: var(--f-display); font-weight: 500; }
+details p { margin-top: 8px; color: var(--muted); }
+footer { padding-block: 40px 0; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--rule); margin-top: 40px; }
+@media (max-width: 560px) {
+  .layers, .needs { grid-template-columns: minmax(0, 1fr); }
+  .steps > li { grid-template-columns: 36px minmax(0, 1fr); gap: 12px; }
+  .steps > li::before { width: 36px; height: 36px; font-size: 1rem; }
+  body { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Obsidian + Claude Code · método Karpathy</span>
+    <h1>Seu segundo cérebro</h1>
+    <p class="lede">Uma pasta de notas no seu computador que o Claude lê, organiza e alimenta com você. Você fala o que aprendeu ou decidiu; ele transforma em nota, liga às outras e guarda o histórico. O Obsidian é onde você lê e navega.</p>
+  </header>
+
+  <section aria-labelledby="como">
+    <span class="eyebrow">Como funciona</span>
+    <h2 id="como">Três camadas de arquivos</h2>
+    <div class="layers">
+      <div class="layer">
+        <code>raw/</code>
+        <span class="who">Você joga</span>
+        <p>Material bruto como chegou: artigo, transcrição de reunião, anotação solta. Nunca é editado.</p>
+      </div>
+      <div class="layer">
+        <code>wiki/</code>
+        <span class="who">O Claude escreve</span>
+        <p>Notas curtas, uma por assunto: livros, ideias, pessoas, projetos. Ligadas entre si.</p>
+      </div>
+      <div class="layer">
+        <code>index.md</code>
+        <span class="who">O mapa</span>
+        <p>O Claude lê o índice primeiro e abre só a nota que interessa. Assim o cérebro cresce sem ficar lento.</p>
+      </div>
+    </div>
+    <p>A ideia vem do Andrej Karpathy (ex-OpenAI e Tesla), que em 2025 propôs usar uma IA como bibliotecária de uma pasta de notas simples. Este kit soma a ela os ajustes que a fizeram funcionar no dia a dia.</p>
+  </section>
+
+  <section aria-labelledby="antes">
+    <span class="eyebrow">Antes de começar</span>
+    <h2 id="antes">O que você precisa</h2>
+    <ul class="needs">
+      <li>Um Mac</li>
+      <li>Uns 20 minutos</li>
+      <li>Claude Code instalado e logado (plano pago do Claude)</li>
+      <li>Conta gratuita no GitHub, se quiser backup na nuvem</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="instalar">
+    <span class="eyebrow">Instalação</span>
+    <h2 id="instalar">Passo a passo</h2>
+    <ol class="steps">
+      <li><div class="step">
+        <h3>Instale o Claude Code</h3>
+        <p>Siga as instruções em <a href="https://claude.com/claude-code">claude.com/claude-code</a>. Para conferir, abra o app <strong>Terminal</strong> e digite <span class="say">claude</span>. Se ele abrir e pedir login, está pronto.</p>
+      </div></li>
+      <li><div class="step">
+        <h3>Baixe o kit</h3>
+        <p>Abra o link do kit que você recebeu, clique no botão verde <strong>Code → Download ZIP</strong> e dê dois cliques no arquivo baixado para descompactar. Ele vira uma pasta nos seus Downloads.</p>
+      </div></li>
+      <li><div class="step">
+        <h3>Abra o Claude dentro da pasta do kit</h3>
+        <p>No Terminal, cole:</p>
+        <div class="cmd"><pre id="c1">cd ~/Downloads/kit-segundo-cerebro-main
+claude</pre><button type="button" data-copy="c1">Copiar</button></div>
+        <p class="note">Se o nome da pasta for outro, digite <span class="say">cd </span> com espaço e arraste a pasta para dentro do Terminal.</p>
+      </div></li>
+      <li><div class="step">
+        <h3>Peça a instalação</h3>
+        <div class="cmd"><pre id="c2">Instala meu segundo cérebro seguindo o INSTALAR.md</pre><button type="button" data-copy="c2">Copiar</button></div>
+        <p>O Claude faz 5 perguntas, uma por vez: seu nome, seu trabalho e projetos, o que nunca pode entrar no cérebro, onde criar a pasta e se você quer backup no GitHub. Depois cria tudo sozinho.</p>
+        <p class="note">Quando ele pedir permissão para rodar um comando, leia o que é e aprove.</p>
+      </div></li>
+      <li><div class="step">
+        <h3>Abra o cérebro no Obsidian</h3>
+        <p>Instale o <a href="https://obsidian.md">Obsidian</a>, clique em <strong>Abrir pasta como cofre</strong> e escolha a pasta que o Claude criou. Depois, em <strong>Configurações → Plugins da comunidade</strong>, ative os plugins, procure <strong>Git</strong> (autor Vinzent), instale e ative. A configuração já vem pronta: ele salva uma versão a cada 10 minutos.</p>
+      </div></li>
+      <li><div class="step">
+        <h3>Faça o primeiro registro</h3>
+        <p>Ainda na conversa com o Claude, diga algo real do seu trabalho:</p>
+        <div class="cmd"><pre id="c3">salva no cerebro: decidi que ...  (e o porquê)</pre><button type="button" data-copy="c3">Copiar</button></div>
+        <p>A nota aparece no Obsidian em segundos. Pronto, está funcionando.</p>
+      </div></li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="dia">
+    <span class="eyebrow">No dia a dia</span>
+    <h2 id="dia">O que dizer ao Claude</h2>
+    <p>Funciona de qualquer pasta, em qualquer conversa com o Claude Code.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Você diz</th><th>O que acontece</th></tr></thead>
+        <tbody>
+          <tr><td><span class="say">salva no cerebro: …</span></td><td>Uma ideia, decisão ou aprendizado vira nota, entra no índice e fica salva.</td></tr>
+          <tr><td><span class="say">ingere isso</span></td><td>Cole um artigo, resumo de livro ou transcrição. O texto original fica guardado e vira nota resumida, ligada ao que você já tem.</td></tr>
+          <tr><td><span class="say">busca no cerebro: …</span></td><td>O Claude responde com base nas suas notas e diz de onde tirou.</td></tr>
+          <tr><td><span class="say">consolida</span></td><td>Arruma o índice com tudo que entrou recentemente.</td></tr>
+          <tr><td><span class="say">bora continuar &lt;projeto&gt;</span></td><td>Retoma um projeto do ponto em que parou.</td></tr>
+          <tr><td><span class="say">vou fechar</span></td><td>Antes de encerrar, o Claude anota onde o trabalho parou e guarda o que valeu da conversa.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="regras">
+    <span class="eyebrow">Por que funciona</span>
+    <h2 id="regras">As quatro regras do método</h2>
+    <div class="rules">
+      <div class="rule">
+        <h3>Grava direto e avisa</h3>
+        <p>Quando o Claude percebe algo que vale guardar, ele grava na hora e avisa numa linha que começa com 📌. Se não quiser aquela nota, peça para tirar. Perguntar antes "quer que eu salve?" fazia quase nada ser salvo: num caso real, 22 sugestões viraram 1 nota.</p>
+      </div>
+      <div class="rule">
+        <h3>Sigilo definido por você</h3>
+        <p>Na instalação você diz o que nunca pode entrar (faturamento de cliente, dados de paciente, contratos). Senhas e documentos de terceiros ficam fora sempre. Na dúvida, o Claude pergunta antes de gravar.</p>
+      </div>
+      <div class="rule">
+        <h3>Problema resolvido, nota atualizada</h3>
+        <p>Quando algo que estava pendente é resolvido, a nota ganha o estado novo com data. O cérebro descreve o presente, não o passado.</p>
+      </div>
+      <div class="rule">
+        <h3>Cada projeto sabe onde parou</h3>
+        <p>Todo projeto tem uma seção "Estado atual" com o feito, o pendente e o próximo passo. É o que permite fechar a conversa hoje e retomar amanhã com uma frase.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="duvidas">
+    <span class="eyebrow">Dúvidas</span>
+    <h2 id="duvidas">Perguntas comuns</h2>
+    <div class="callout">
+      <strong>Para onde vão minhas notas?</strong>
+      <p>Os arquivos ficam no seu computador, e no seu GitHub privado se você escolheu backup. O que o Claude lê para responder passa pelos servidores da Anthropic, como qualquer conversa com ele. Por isso a regra de sigilo existe.</p>
+    </div>
+    <div class="faq">
+      <details><summary>O Claude gravou uma nota que eu não queria</summary><p>Diga "tira essa nota". Ela vai para a pasta de arquivo e sai do índice. O histórico guarda tudo, então nada se perde de vez.</p></details>
+      <details><summary>Preciso abrir o Obsidian para usar?</summary><p>Não. O Claude trabalha direto nos arquivos. O Obsidian serve para você ler, navegar e ver o gráfico de ligações entre as ideias.</p></details>
+      <details><summary>Funciona no Windows?</summary><p>O kit foi feito e testado no Mac. No Windows, com o Claude Code e o Git instalados, deve funcionar, mas ainda não foi testado.</p></details>
+      <details><summary>Uso o Codex também</summary><p>As regras do cérebro ficam no arquivo AGENTS.md, que o Codex lê. Se você tem o Codex instalado, a instalação também avisa a ele onde fica o seu cérebro.</p></details>
+      <details><summary>Quero mudar uma regra</summary><p>Peça ao Claude: "muda a regra do cérebro para …". Ele edita o AGENTS.md da pasta do cérebro, que é onde todas as regras moram.</p></details>
+    </div>
+  </section>
+
+  <footer>Kit segundo cérebro · baseado no método LLM wiki de Andrej Karpathy.</footer>
+</div>
+
+<script>
+document.querySelectorAll('[data-copy]').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var el = document.getElementById(btn.getAttribute('data-copy'));
+    var text = el.textContent;
+    var done = function () { btn.textContent = 'Copiado'; setTimeout(function () { btn.textContent = 'Copiar'; }, 1600); };
+    var fallback = function () { var r = document.createRange(); r.selectNodeContents(el); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Selecionado'; };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  });
+});
+</script>
+</html>
